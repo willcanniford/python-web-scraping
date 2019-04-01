@@ -1,0 +1,4 @@
+# Building a dataset of gins
+I would like to build up a dataset of gins and thought that a good place to start would be an online store that I know stocks a wide and deep variety of gins so that I would be able to build up a conclusive dataset that I could clean and make available for further analysis later on. Enter [Master of Malt](https://www.masterofmalt.com/)!  
+
+Later it could be an idea to clean and combine datasets from various sources to compare prices etc and to fill in more information but for now I will focus on just creating a scraper that actually collects information that I could use. 
