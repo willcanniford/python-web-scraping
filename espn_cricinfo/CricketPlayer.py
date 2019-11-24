@@ -31,6 +31,18 @@ class CricketPlayer:
         raw_innings['Opposition'] = raw_innings['Opposition'].str.replace('v ', '')
         raw_innings.replace('-', np.nan, inplace=True)
         raw_innings.columns = raw_innings.columns.str.lower().str.replace(' ', '_')
-        raw_innings['is_out'] = raw_innings.score.astype('str').apply(lambda x: np.nan if x == 'nan' else False if '*' in x else True)
+        raw_innings['is_out'] = raw_innings.score.astype('str').apply(lambda x: False if x in ['nan', 'DNB'] else False if '*' in x else True)
         raw_innings['did_bowl'] = raw_innings.overs.astype('str').apply(lambda x: False if x in ['nan', 'DNB'] else True)
-        return(raw_innings[['inns', 'score', 'is_out', 'overs', 'conc', 'wkts', 'did_bowl', 'ct', 'st', 'opposition', 'ground', 'start_date']])
+        raw_innings['did_bat'] = raw_innings.score.str.replace('*', '').astype('str').apply(lambda x: True if x.isnumeric() else False)
+        raw_innings['score'] = raw_innings['score'].str.replace('*', '')
+        return(raw_innings[['inns', 'score', 'did_bat', 'is_out', 'overs', 'conc', 'wkts', 'did_bowl', 'ct', 'st', 'opposition', 'ground', 'start_date']])
+    
+    def batting_summary(self):
+        innings = self.innings()
+        total_at_bats = innings.did_bat.sum()
+        dismissals = innings.is_out.sum()
+        total_runs = innings.score[innings.did_bat].dropna().astype('int').sum()
+        return(pd.DataFrame({'Innings': total_at_bats, 
+                             'Dismissals': dismissals, 
+                             'Total Runs': total_runs, 
+                             'Average': round(total_runs/dismissals, 4)}, index=['Overall']))
