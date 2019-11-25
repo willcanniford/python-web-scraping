@@ -54,3 +54,12 @@ class CricketPlayer:
         rolling_innings = innings.rolling(n_innings).sum()
         rolling_innings['average'] = rolling_innings['score'] / rolling_innings['is_out']
         return(rolling_innings)
+    
+    def rolling_average_matches(self, n_matches):
+        matches = self.innings()[self.innings().did_bat].set_index('start_date').loc[:, ['score', 'is_out']]
+        matches.score = matches.score.astype('int')
+        matches.index = pd.to_datetime(matches.index)
+        matches = matches.groupby('start_date').sum()
+        rolling_matches = matches.rolling(n_matches).sum()
+        rolling_matches['average'] = rolling_matches['score'] / rolling_matches['is_out']
+        return(rolling_matches)
