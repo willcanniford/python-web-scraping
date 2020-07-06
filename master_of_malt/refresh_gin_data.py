@@ -1,14 +1,12 @@
 # Imports
-import requests
-import pandas as pd
-from bs4 import BeautifulSoup
-import numpy as np
-import random
-import time
-from helpers import get_pagination_links
+import helpers as hp
 
-
-# Set the master link 
+# Set the master link
 url = "https://www.masterofmalt.com/gin/"
+testing_url = "https://www.masterofmalt.com/gin/failures"
 
-print(get_pagination_links("https://www.masterofmalt.com/gin/"))
+# Test the url checker against status code 200
+print(hp.check_url_status_code(testing_url, 200))
+print(hp.check_url_status_code(url, 200))
+
+print(hp.get_pagination_links("https://www.masterofmalt.com/gin/"))
