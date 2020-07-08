@@ -33,3 +33,20 @@ def check_url_status_code(url: str, cookies: dict = {}, headers: dict = {}, desi
     :return: bool, does the response status code match desired_status_code
     """
     return requests.get(url, cookies=cookies, headers=headers).status_code == desired_status_code
+
+
+def check_page_exists(url: str, cookies: dict = {}, headers: dict = {}):
+    """
+    Check whether a given URL can be reached, even after redirects
+    :param headers: dict, headers to pass to requests.get
+    :param url: str, the url to check
+    :param cookies: dict, cookies to pass to requests.get
+    :return: bool, whether the url provided was found
+    """
+    response = requests.get(url, cookies=cookies, headers=headers)
+
+    if response.history:
+        # The URL was redirected, but you ended up at the given url
+        return response.status_code == 200 and response.url == url
+    else:
+        return response.status_code == 200
