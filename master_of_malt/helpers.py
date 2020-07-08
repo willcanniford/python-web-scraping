@@ -22,11 +22,14 @@ def get_pagination_links(url, html_class='list-paging'):
     return pagination_hrefs
 
 
-def check_url_status_code(url, desired_status_code=200):
+def check_url_status_code(url: str, cookies: dict = {}, headers: dict = {}, desired_status_code: int = 200) -> bool:
     """
     Check the status code for a given url when requested
+    :rtype: bool
+    :param cookies: dict, headers to pass to the requests.head call
+    :param headers: dict, cookies to pass to the requests.head call
     :param url: string, the url to request
     :param desired_status_code: int, the desired response status code
     :return: bool, does the response status code match desired_status_code
     """
-    return requests.head(url).status_code == desired_status_code
+    return requests.get(url, cookies=cookies, headers=headers).status_code == desired_status_code
